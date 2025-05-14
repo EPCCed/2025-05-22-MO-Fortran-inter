@@ -26,7 +26,7 @@ We recall that the general form of the declaration is:
     procedure-part ]
   end type [ type-name ]
 ```
-Compoenents types may be intrinsic, allocatable, pointer, or other derived
+Components of types may be intrinsic, allocatable, pointer, or other derived
 types. The procedure part is used (optionally) to define so-called
 _type-bound procedures_. These are the equivalent of class methods in other
 languages (and will be covered in detail in later Sections). Scope of
@@ -162,7 +162,7 @@ $ ftn my_array_type.f90 example2.f90
 ```
 and check the values printed out. What happens if you insert a
 call to `my_array_destroy(a)` (which deallocates the values
-assoviated with the `my_array_t` argument) at the end of the
+associated with the `my_array_t` argument) at the end of the
 program and try to print the values of the pointer type `c`
 again?
 

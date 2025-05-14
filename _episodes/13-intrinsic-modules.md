@@ -10,11 +10,9 @@ keypoints:
 - ""
 ---
 
-# 
-
 ## Intrisic and non-intrinsic modules
 
-Five intrinsic modules are provided by the implementation: one we
+Five intrinsic modules are provided by the implementation: we
 have seen `iso_fortran_env`.
 
 Three are related to IEEE arithmetic: `ieee_arithmetic`, `ieee_exceptions`
@@ -33,12 +31,13 @@ Likewise a non-intrinsic module can be used:
 ```
   use, non_intrinsic :: iso_fortran_env
 ```
-This would generate an error were a user-provided `iso_fortran_env` be
+This would generate an error if a user-provided `iso_fortran_env` were
 unavailable to the compiler.
 
-Best practice is always to use an `only` clase with intrinsic modules,
+Best practice is to always use an `only` clause with intrinsic modules,
 which enumerates the names required in the current scope. This is a
-general rule which limits "namespace pollution".
+general rule which limits "namespace pollution", and can be applied to
+your own modules too.
 
 
 ## Intrinsic module `iso_fortran_env`
@@ -55,7 +54,7 @@ These include:
    related to i/o
 
 
-F2008 included king type parameters for frequently used intrinsic data
+F2008 included kind type parameters for frequently used intrinsic data
 types:
 1. `int8`, `int16`, `int32`, `int64`: integer kind type parameter for
    intrinsic integers (in bits);

@@ -246,7 +246,7 @@ A procedure pointer must be associated in order to reference the procedure.
 ### Exercise (10 minutes)
 
 An example of an external function is provided in `external.f90`. This is a
-function which has a single argument which is a integer rank 1 array, and
+function which has a single argument which is an integer rank 1 array, and
 returns an integer which is the size of the array.
 
 The accompanying program `example2.f90` makes a simple `procedure` declaration
@@ -262,7 +262,7 @@ Adjust the example to provide a _specific_ interface block which describes
 the external function. Make an appropriate procedure declaration, and also
 try declaring a pointer to the procedure.
 
-Check this works and the the compiler now traps errors associated with
+Check this works and that the compiler now traps errors associated with
 incompatible actual arguments.
 
 Try replacing the specific interface block with an equivalent abstract

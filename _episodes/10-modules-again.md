@@ -79,7 +79,7 @@ submodule (parent-identifier) submodule-name
   [ module-subprogram-part]
 end [submodule [ submodule-name] ]
 ```
-where the `parent-identier` is name of the parent module.
+where the `parent-identifier` is name of the parent module.
 
 ### Submodule procedures
 
@@ -145,10 +145,10 @@ keep the full form.
 ### Host association and use association
 
 A submodule has access to entities in the parent module automatically
-by host associatio, but may also `use` other modules in the standard
+by host association, but may also `use` other modules in the standard
 way.
 
-A submodule of `module a` can access `module b` but `use` association.
+A submodule of `module a` can access `module b` by `use` association.
 In addition, a submodule of `module b` can access `module a`. This
 breaks the circular dependency problem in standard modules.
 
@@ -156,7 +156,7 @@ breaks the circular dependency problem in standard modules.
 
 Note that submodules do not contain `public` or `private` declarations.
 However, additional variables, types, or named constants may be defined
-in a submodule specification part. These a neither public nor private,
+in a submodule specification part. These are neither public nor private,
 but can only be accessed in the submodule and any descendants by host
 association.
 

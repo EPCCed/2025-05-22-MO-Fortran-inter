@@ -37,7 +37,7 @@ example, integer interoperable types include:
 ```
 The value can be -1 (no interoperable Fortran type) or -2 (no corresponding
 C type). Recall `size_t` is usually an unsigned type in C. There is still no
-direct ananlogue of unsigned types in Fortran, although an interoperable
+direct analogue of unsigned types in Fortran, although an interoperable
 type is almost certainly available.
 
 For real types, the full list is:
@@ -250,14 +250,14 @@ with C pointer types. A number of functions are provided to manage the
 translation of Fortran entities to and from these new types.
 
 - `c_loc(x)` returns the `c_ptr` type which C can use as the address of
-the argument. The argument can be a scalar, an contiguous array of
+the argument. The argument can be a scalar, a contiguous array of
 non-zero size (or allocated non-zero size), or an associated pointer.
 The argument must be of interoperable type. The argument must be a
 pointer or a data object with target attribute.
 
 - `c_funloc(p)` can return the address of an interoperable procedure.
 
-- `c_associated(c_ptr1 [, c_ptr2])` if an analogue of the `associated()`
+- `c_associated(c_ptr1 [, c_ptr2])` is an analogue of the `associated()`
 intrinsic which returns `.true.` if the first argument is not
 `c_null_ptr`. If the second argument is present, the function will
 return `.true.` if both arguments are the same.

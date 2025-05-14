@@ -160,7 +160,7 @@ of only of the declared type, but not of its descendents. So
 ```
 
 Dynamic type will also be relevant when procedures are considered:
-polymorhic dummy arguments take on the dynamic type of the associated
+polymorphic dummy arguments take on the dynamic type of the associated
 actual argument.
 
 

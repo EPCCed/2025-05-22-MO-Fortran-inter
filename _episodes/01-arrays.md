@@ -17,6 +17,9 @@ We may declare arrays of intrinsic type with a fairly elastic syntax, e.g.:
   integer, dimension(10, 2) :: a
   integer, dimension(10, 2) :: b, c, d, e(10, 3)
 ```
+Note that the declaration `e(10, 3)` will override the `dimension(10, 2)` statement,
+however this mix and match approach is generally discouraged.
+
 One may also omit the `dimension` attribute:
 ```
   integer, dimension(10, 2) :: a
@@ -51,7 +54,7 @@ objects which may not be contiguous:
 
 Arrays of rank up to 7 were supported (pre-F2008); this was increased to
 a limit of 15 at F2008. F2018 introduced an intrinsic `rank()` inquiry
-function which returns the scaler integer rank of the array argument.
+function which returns the scalar integer rank of the array argument.
 
 
 ## Array constructors
@@ -137,7 +140,7 @@ go to zero.
 
 Two zero-sized arrays of the same rank may have different shapes, and
 so do not necessarilty conform (although a zero-sized array always
-confirms with a scalar, as usual). As a zero-sized array has no
+conforms with a scalar, as usual). As a zero-sized array has no
 elements, it is always considered to be defined.
 
 

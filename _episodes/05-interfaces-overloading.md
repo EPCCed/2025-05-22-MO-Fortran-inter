@@ -63,7 +63,7 @@ end interface assignment (=)
 ```
 In this context, the procedure must be a subroutine (not a function) with
 exactly two non-optional arguments. To prevent ambiguity, the first argument
-must correspond to the left-hand side of the assignment an have
+must correspond to the left-hand side of the assignment and have
 `intent(inout)` or `intent(out)`, while the second argument must represent
 the right-hand side of the assignment and have `intent(in)`.
 
