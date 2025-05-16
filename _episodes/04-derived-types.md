@@ -1,13 +1,17 @@
 ---
 title: "Derived types"
 teaching: 10
-exercises: 10
+exercises: 20
 questions:
-- ""
+- "How are data structures (derived types) defined in Fortran?"
+- "How can we control access to components of data structures in Fortran?"
+- "How does assignment between derived types work?"
 objectives:
-- ""
+- "Be able to declare your own data structures"
+- "Understand assignment operations in derived types and when shallow/deep copying occurs"
 keypoints:
-- ""
+- "Derived types enable creating custom data structures in Fortran."
+- "Access to components of derived types can be controlled via the `private` attribute"
 ---
 
 Derived types provide the fundamental basis for data structures (cf. `struct` in
@@ -81,18 +85,46 @@ Here, the components of `a` will take on the values of the components of `b`.
 If a type component is itself a derived type, then intrinsic assignment takes
 place in the same way for that component.
 
-#### Example (4 minutes)
+#### Example (5 minutes)
 
-The accompanying module `my_semi_opaque_type.f90` provides a public definition
-of the type as defined above, and includes a function to initialise the two
-components. The accompanying program `exercise1.f90` will make the intrinsic
-assignment. You can compile with, e.g.,
-```
-$ ftn my_semi_opaque_type.f90 example1.f90
-```
-How are you going to check that the result of the assignment is correct for
-_both_ components (by printing the result to the screen)? Write some code to
-perform this check.
+> ## Intrinsic assignment
+>
+> The accompanying module `my_semi_opaque_type.f90` provides a public definition
+> of the type as defined above, and includes a function to initialise the two
+> components. The accompanying program `exercise1.f90` will make the intrinsic
+> assignment. You can compile with, e.g.,
+> ```
+> $ ftn my_semi_opaque_type.f90 example1.f90
+> ```
+> How are you going to check that the result of the assignment is correct for
+> _both_ components (by printing the result to the screen)? Write some code to
+> perform this check.
+>
+> > ## Solution
+> >
+> > ```
+> > subroutine my_semi_opaque_print(name, val)
+> > 
+> >   character(len=*), intent(in) :: name
+> >   type(my_semi_opaque_t), intent(in) :: val
+> > 
+> >   print *, name, "%idata=", val%idata
+> >   print *, name, "%ndata=", val%ndata
+> >   
+> > end subroutine my_semi_opaque_print
+> > ```
+> >
+> > This code could be added to either the example program or the module, from a code organisation
+> > perspective the module probably makes the most sense.
+> > You should obtain the following output
+> > ```
+> > gfortran my_semi_opaque_type.f90 example1.f90 && ./a.out
+> >  a%idata=           2
+> >  a%ndata=           3
+> > ```
+> >
+> {: .solution}
+{: .challenge}
 
 ### Allocatable components
 
@@ -127,6 +159,14 @@ This is, in the jargon, a _deep copy_. You have a copy of the actual data.
 Again, this process is repeated until any ultimate allocatable component
 is reached.
 
+> ## Derived types as procedure arguments
+>
+> Recall the behaviour of allocatable arrays as arguments to procedures. 
+> When the argument is `intent(out)` the array is deallocated, the same applies to allocatable
+> components of derived types when a derived-type argument is `intent(out)`.
+>
+{: .callout}
+
 ### Pointer components
 
 For types with pointer components, the situation is different. Consider:
@@ -153,23 +193,61 @@ unassociated (or deallocated), then the reference retained in
 This is a _shallow copy_. No data have been duplicated; only the
 pointer description itself.
 
-#### Example (2 minutes)
+#### Example (5 minutes)
 
-In the accompanying module `my_array_type.f90` both the types above
-have been declared, along with a function to initialise some array
-values. Compile the example program:
+> ## Shallow and deep copies
+> 
+> In the accompanying module `my_array_type.f90` both the types above
+> have been declared, along with a function to initialise some array
+> values. Compile the example program:
+> ```
+> $ ftn my_array_type.f90 example2.f90
+> ```
+> and check the values printed out. What happens if you insert a
+> call to `my_array_destroy(a)` (which deallocates the values
+> associated with the `my_array_t` argument) at the end of the
+> program and try to print the values of the pointer type `c`
+> again?
+>
+> > ## Solution 1A
+> >
+> > The output of the initial program
+> > ```
+> >  State of a            3 T
+> >  State of c            3 T   1.00000000       2.00000000       3.00000000 
+> > ```
+> >
+> {: .solution}
+>
+> > ## Solution 1B
+> >
+> > The output of the program after destroying `a` shows `c%values` now points to uninitialised data, however `c%nlen` is a deep copy and is still "valid" (in some sense).
 ```
-$ ftn my_array_type.f90 example2.f90
+ State of a            3 T
+ State of c            3 T   1.00000000       2.00000000       3.00000000    
+ State of c            3 T  -1.40913533E-36   1.56146688E-41   1.12103877E-44
 ```
-and check the values printed out. What happens if you insert a
-call to `my_array_destroy(a)` (which deallocates the values
-associated with the `my_array_t` argument) at the end of the
-program and try to print the values of the pointer type `c`
-again?
-
-What happens if you try to make a direct assignment between a
-`my_array_t` object on the right-hand side, and a `my_array_pointer_t`
-on the left-hand side?
+> >
+> {: .solution}
+> 
+> What happens if you try to make a direct assignment between a
+> `my_array_t` object on the right-hand side, and a `my_array_pointer_t`
+> on the left-hand side?
+>
+> > ## Solution 2
+> >
+> > The compiler rejects the code as invalid due to different types.
+> > ```
+> > gfortran my_array_type.f90 example2.f90 && ./a.out
+> > example2.f90:24:6:
+> > 
+> >    24 |   c = b
+> >       |      1
+> > Error: Cannot convert TYPE(my_array_t) to TYPE(my_array_pointer_t) at (1)
+> > ```
+> >
+> {: .solution}
+{: .challenge}
 
 ## A defined assignment
 
@@ -197,11 +275,39 @@ This must be a subroutine with two arguments, the first with `intent(out)`
 (or `inout`) to represent the left-hand side of the assignment, and the
 second with `intent(in)` to represent the right-hand side.
 
-### Exercise (4 minutes)
+### Exercise (10 minutes)
 
-In `example2.f90` we explcitly assigned both components of the `my_array_pointer_t`
-in the code and found we could not make an assignment between `my_array_pointer_t`
-and `my_array_t`. Add a subroutine in `my_array_type.f90` to make this possible.
-
+> ## Constructing a derived type pointer
+> 
+> In `example2.f90` we explcitly assigned both components of the `my_array_pointer_t`
+> in the code and found we could not make an assignment between `my_array_pointer_t`
+> and `my_array_t`. Add a subroutine in `my_array_type.f90` to make this possible.
+>
+> > ## Solution
+> >
+> > First we define the `(=)` interface in the module
+> > ```
+> > interface assignment (=)
+> >    module procedure my_array_ptr_assignment
+> > end interface assignment (=)
+> > ```
+> > and the assignemnt subroutine itself
+> > ```
+> > subroutine my_array_ptr_assignment(a, b)
+> > 
+> >   type(my_array_pointer_t), intent(out) :: a
+> >   type(my_array_t), pointer, intent(in) :: b
+> > 
+> >   a%nlen = b%nlen
+> >   a%values => b%values
+> > 
+> > end subroutine my_array_ptr_assignment
+> > ```
+> > noting that the assignment target must be a `pointer` so that we can use it as the target of the
+> > `my_array_pointer_t`.
+> > Then we can use `c = a` in the example program in place of the member-wise assignment.
+> >
+> {: .solution}
+{: .challenge}
 
 {% include links.md %}

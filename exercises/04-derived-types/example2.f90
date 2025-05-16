@@ -17,8 +17,4 @@ program example2
 
   print *, "State of c ", c%nlen, associated(c%values), c%values
 
-  call my_array_destroy(a)
-
-  print *, "State of c ", c%nlen, associated(c%values), c%values
-
 end program example2
