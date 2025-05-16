@@ -3,11 +3,17 @@ title: "More on pointers"
 teaching: 15
 exercises: 15
 questions:
-- ""
+- "How are pointers associated with data?"
+- "How can pointers be used to access arrays?"
+- "How can pointers be associated with procedures"
 objectives:
-- ""
+- "Understand pointer association"
+- "Understand how pointers allow us to create 'views' of arrays"
+- "Understand the use of procedure pointers"
 keypoints:
-- ""
+- "Fortran pointers describe what they are pointing to, not only its address"
+- "We must take care when programming with pointers to avoid aliasing"
+- "Procedure pointers create a binding between a variable and a procedure"
 ---
 
 In C, a (bare) pointer is simply a variable that holds an address.
