@@ -23,7 +23,7 @@ We recall that a pointer variable may be undefined, unassociated
   integer, pointer :: p2 => null()    ! unassociated
   integer, pointer :: p3 => t         ! associated with target t
 ```
-The difference between undefined and unassociated is that a undefined
+The difference between undefined and unassociated is that an undefined
 pointer can not have its association status queried by the intrinsic
 function `associated()`.
 
@@ -51,6 +51,20 @@ descriptor which holds information about what it is pointing to
 `shape()`, `lbound()`, and `ubound()` to interrogate
 the pointer as one would for an array. The pointer must be associated to
 do so.
+
+> ## Pointer shapes and bounds
+>
+> In the above example, what are the `shape()`, `lbound()` and `ubound()` for the pointer?
+> See if you can determine what this will be, check your reasoning by writing a simple program.
+>
+> > ## Solution
+> >
+> > ```
+> > aaa
+> > ```
+> >
+> {: .solution}
+{: .challenge}
 
 It is possible to specify the lower bound of a pointer array:
 ```
