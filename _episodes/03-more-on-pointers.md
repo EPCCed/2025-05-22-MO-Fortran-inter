@@ -46,25 +46,10 @@ For example, if the target is an array, we might have:
 ```
 then the shape and bounds are those the right-hand side. We can see here
 that the pointer is not a simple object. It should be viewed as a
-descriptor which holds information about what it is pointing to
-(in this case a rank 1 array 1:5). Here one could use intrinsic functions
+descriptor which holds information about what it is pointing to. Here one could use intrinsic functions
 `shape()`, `lbound()`, and `ubound()` to interrogate
 the pointer as one would for an array. The pointer must be associated to
 do so.
-
-> ## Pointer shapes and bounds
->
-> In the above example, what are the `shape()`, `lbound()` and `ubound()` for the pointer?
-> See if you can determine what this will be, check your reasoning by writing a simple program.
->
-> > ## Solution
-> >
-> > ```
-> > aaa
-> > ```
-> >
-> {: .solution}
-{: .challenge}
 
 It is possible to specify the lower bound of a pointer array:
 ```
@@ -104,14 +89,47 @@ if desired. If the argument has been allocated via `allocate()`, then
 
 ### Exercise: (4 minutes)
 
-Write a program which initialises an integer array `a(10)`
-and assigns the elements the values 1-10. Associate a pointer with the
-even-numbered elements of `a(2:10)` (as above). Print out the values
-returned by the functions `lbound()`, `ubound()` and `size()` when applied
-to the pointer. Check the value associated with the fourth element of the
-pointer is eight.
 
-A bare outline is provided in `example1.f90`.
+> ## Pointer shapes and bounds
+>
+> Write a program which initialises an integer array `a(10)`
+> and assigns the elements the values 1-10. Associate a pointer with the
+> even-numbered elements of `a(2:10)` (as above). Print out the values
+> returned by the functions `lbound()`, `ubound()` and `size()` when applied
+> to the pointer. Check the value associated with the fourth element of the
+> pointer is eight.
+> 
+> A bare outline is provided in `example1.f90`.
+>
+> > ## Solution
+> >
+> > ```
+> > program example1
+> > 
+> >   implicit none
+> > 
+> >   integer, target  :: a(10)
+> >   integer, pointer :: p(:)
+> >   integer :: i
+> > 
+> >   p => a(2:10:2)
+> >   a = [ (i, i = 1, 10) ]
+> >
+> >   ! print pointer lower bound lbound()
+> >   print *, "Lower bound: ", lbound(p) ! => 1
+> >
+> >   ! print pointer upper bound ubound()
+> >   print *, "Upper bound: ", ubound(p) ! => 5
+> > 
+> >   ! check size and elements
+> >   print *, "Size: ", size(p) ! => 5
+> >   print *, "p(4) = ", p(4)   ! => 8
+> > 
+> > end program example1
+> > ```
+> >
+> {: .solution}
+{: .challenge}
 
 ## Pointers as arguments
 
