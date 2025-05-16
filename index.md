@@ -20,11 +20,11 @@ root: .
 
 <h2>Description</h2>
 
-Fortran (a contraction of Formula Translation) was the first programming language to have a standard (in 1954), but has changed significantly over the years. More recent standards (the latest being Fortran 2018) come under the umbrella term "Modern Fortran". Fortran retains very great significance in many areas of scientific and numerical computing, particularly for applications such as quantum chemistry, plasmas, engineering and fluid dynamics, and in numerical weather prediction and climate models.
+Fortran (a contraction of Formula Translation) was the first programming language to have a standard (in 1954), but has changed significantly over the years. More recent standards (the latest being Fortran 2023) come under the umbrella term "Modern Fortran". Fortran retains very great significance in many areas of scientific and numerical computing, particularly for applications such as quantum chemistry, plasmas, engineering and fluid dynamics, and in numerical weather prediction and climate models.
 
 This intermediate course concentrates on some of the more recent features which are central to Modern Fortran. Attendees should be familiar with the basics of Fortran programming which might be covered in an introductory course, e.g., the one at,
 
-https://github.com/ARCHER2-HPC/archer2-fortran-intro
+https://epcced.github.io/2025-05-19-MO-Fortran-intro/
 
 So, attendees should be comfortable writing structured Fortran programs based on modules and procedures, and have a sound grounding in variables, logic, flow-of-control, and so on. Some knowledge of Fortran I/O is assumed.
 
@@ -83,7 +83,7 @@ The course requires a Fortran compiler, for which a local machine or laptop may 
   <strong>Requirements:</strong> Participants must have a working laptop or 
   desktop computer with a Mac, Linux, or Windows operating system (not a 
   tablet, Chromebook, etc.) that they have administrative privileges on. They 
-  should have access to a terminal (Max and Linux users should have a terminal 
+  should have access to a terminal (Mac and Linux users should have a terminal 
   installed by default; Windows users should get either 
   <a href="https://mobaxterm.mobatek.net/">MobaXterm</a> or 
   <a href="https://www.putty.org/">PuTTY</a>. They are also required to abide 

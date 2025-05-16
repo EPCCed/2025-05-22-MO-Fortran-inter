@@ -77,14 +77,14 @@ For details of how to log into an ARCHER2 account, see https://docs.archer2.ac.u
 
 Check out the git repository to your laptop or ARCHER2 account.
 ```
-$ git clone https://github.com/EPCCed/2025-05-19-MO-Fortran-intro.git
-$ cd 2025-05-19-MO-Fortran-intro
+$ git clone https://github.com/EPCCed/2025-05-22-MO-Fortran-inter.git
+$ cd 2025-05-22-MO-Fortran-inter
 ```
 The default Fortran compiler on ARCHER2 is the Cray Fortran compiler
 invoked using `ftn`. For example,
 ```
-$ cd section1.01
-$ ftn example1.f90
+$ cd examples/01-arrays
+$ ftn problem1.f90
 ```
 should generate an executable with the default name `a.out`.
 

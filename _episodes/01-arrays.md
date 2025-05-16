@@ -3,11 +3,15 @@ title: "Arrays"
 teaching: 10
 exercises: 10
 questions:
-- ""
+- "How are arrays declared?"
+- "How can array sizes be determined at runtime?"
 objectives:
-- ""
+- "Understand how to define static and dynamic arrays"
+- "Diganose and debug array definitions in simple programs"
 keypoints:
-- ""
+- "Fortran supports both static- and dynamic-sized arrays"
+- "Fortran arrays are objects, allowing out of bounds accesses to be checked"
+- "The bounds of an array can be set by the programmer"
 ---
 
 ## Declarations
