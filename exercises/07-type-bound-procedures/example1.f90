@@ -29,7 +29,6 @@ program test1
   print *, "Sphere radius    ", s%a
 
   print *, "Object volume    ", obj%volume()
-  print *, "Sphere volume    ", s%volume()
-  print *, "Sphere mass      ", s%mass()
+  !print *, "Sphere volume    ", s%volume()
 
 end program test1
