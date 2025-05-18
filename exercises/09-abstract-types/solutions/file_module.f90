@@ -40,7 +40,7 @@ module file_module
     procedure, pass :: open  => open_formatted
     procedure, pass :: write => write_formatted
     procedure, pass :: close => close_formatted
- end type file_formatted_writer_t
+  end type file_formatted_writer_t
 
  !-----------------------------------------------------------------------------
 
@@ -135,7 +135,6 @@ contains
     allocate(fp)
 
   end function create_file_unformatted_writer_t
-
 
   function file_writer_from_string(str) result(fp)
 
