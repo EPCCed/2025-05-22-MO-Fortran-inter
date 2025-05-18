@@ -351,7 +351,7 @@ returns `.true.` if the dynamic types of both arguments are equal.
 > the `example2.f90` program.
 {: .challenge}
 
-> ## Type constructors again 
+> ## (Optional) Type constructors again 
 > 
 > Write some generic constructors for object types
 > which take different data types as arguments. For example, it might be a
