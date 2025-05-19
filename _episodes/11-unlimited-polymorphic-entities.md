@@ -3,11 +3,13 @@ title: "Unlimited polymorphic entities"
 teaching: 10
 exercises: 20
 questions:
-- ""
+- "How does Fortran support unknown data (at compile time) types?"
 objectives:
-- ""
+- "Understand the use of unlimited polymorphic entities"
+- "Implement a data structure capable of holding arbitrary data based on polymorphic entities"
 keypoints:
-- ""
+- "Unlimited polymorphic entities provide a `void *`-like type in Fortran"
+- "Without determining the unlimite polymorphic entity's dynamic type, it cannot be used"
 ---
 
 It is sometimes useful in C to be able to use a `void *` pointer,
