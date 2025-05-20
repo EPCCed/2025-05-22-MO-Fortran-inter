@@ -169,7 +169,6 @@ with dummy argument which is a non-pointer data object.
 > > ```
 > > interface my_array_t
 > >    module procedure my_array_allocate
-> >    module procedure my_array_allocate_set
 > > end interface my_array_t
 > > ```
 > > The object can now be initialised as `a = my_array_t(3)` and the output should match the
