@@ -1,13 +1,15 @@
 ---
 title: "Arrays as arguments"
 teaching: 10
-exercises: 20
+exercises: 15
 questions:
 - "How are arrays passed as arguments?"
 - "How are array slices passed as arguments?"
 - "How do allocatable array arguments interact with argument intent attributes?"
 objectives:
 - "Understand array argument behaviour"
+- "Make use of non-standard array bounds in a simple program"
+- "Write a program to illustrate the interactions between `allocatable` and `intent(out)` dummy arguments."
 keypoints:
 - "Arrays passed as arguments retain their size, not their bounds"
 - "Array arguments behave as though passed by reference, however array sections may require copy-in, copy-out"
@@ -57,16 +59,38 @@ lower bound of `1`. This may not be what is expected.
 
 ### Example (5 minutes)
 
-As a simple illustration of this problem, the following example should print out
-the values `0.0, 1.0, ...` (not `1.0, 2.0, ...`):
-```
-$ ftn example1.f90
-```
-What needs to be done to correct the situation (and we want to keep
-the declaration `a(0:3)`)? Correct the program.
-
-Bonus question: why do we need the optional argument `dim` in the `lbound()`
-and `ubound()` invocations in the subroutine?
+> ## Array arguments bounds
+> 
+> As a simple illustration of this problem, the following example should print out
+> the values `0.0, 1.0, ...` (not `1.0, 2.0, ...`):
+> ```
+> $ ftn example1.f90
+> ```
+> What needs to be done to correct the situation (and we want to keep
+> the declaration `a(0:3)`)? Correct the program.
+>
+> > ## Solution
+> > 
+> > Replacing the dummy argument declaration with
+> > ```
+> > real, intent(inout) :: array(0:)
+> > ```
+> > will set the `lbound` of the `array` variable to `0` with the `ubound` set automatically to
+> > preserve the shape.
+> >
+> {: .solution}
+> 
+> Bonus question: why do we need the optional argument `dim` in the `lbound()`
+> and `ubound()` invocations in the subroutine?
+>
+> > ## Solution
+> > 
+> > The intrinsic functions `lbound` and `ubound` return a rank-1 array of the bounds by default,
+> > passing the optional argument `dim` returns the scalar bound corresponding to that array
+> > dimension.
+> >
+> {: .solution}
+{: .challenge}
 
 ### Automatic objects
 
@@ -181,27 +205,57 @@ compiler is given the freedom to do this if it is deemed appropriate. So
 Fortran cannot be described as "call by reference" or "call by value". The
 standard only says the mechanism "is usually similar to call by reference".
 
-### Example (5 minutes)
+### Example (2 minutes)
 
-If you wish to convince yourself of this, a version of this code has been
-provided:
-```
-$ ftn example2.f90
-```
-A `print` statement has been added to the subroutine to confirm that the
-dummy argument is an entity of size `3`.
+> ## Passing array sections
+> 
+> If you wish to convince yourself of this, a version of this code has been
+> provided:
+> ```
+> $ ftn example2.f90
+> ```
+> A `print` statement has been added to the subroutine to confirm that the
+> dummy argument is an entity of size `3`.
+{: .challenge}
 
 ## Exercise (10 minutes)
 
-Write a short example along the lines of `example2.f90` to check that an
-allocatable dummy argument with intent `out` is indeed deallocated on
-entry to the subroutine.
-
-Can an array section be passed to a subroutine where the corresponding
-dummy argument has been declared alloctable?
-
-What happens if a function with an allocatable result returns which the
-result in an unallocated state?
+> ## Allocatable array arguments
+> 
+> Write a short example along the lines of `example2.f90` to check that an
+> allocatable dummy argument with intent `out` is indeed deallocated on
+> entry to the subroutine.
+> 
+> > ## Solution
+> > 
+> > Example output might look like
+> > ```
+> > Initial values    1.00000000       2.00000000       3.00000000       4.00000000       5.00000000
+> > The argument b is unallocated
+> > Final values 
+> > ```
+> >
+> {: .solution}
+>
+> Can an array section be passed to a subroutine where the corresponding
+> dummy argument has been declared alloctable?
+>
+> > ## Solution
+> > 
+> > No, as the actual argument and intermediate array slice's allocation status may not be the same
+> > after the call.
+> >
+> {: .solution}
+> 
+> What happens if a function with an allocatable result returns which the
+> result in an unallocated state?
+>
+> > ## Solution
+> >
+> > The variable assignment will be unallocated.
+> >
+> {: .solution}
+{: .challenge}
 
 
 {% include links.md %}
