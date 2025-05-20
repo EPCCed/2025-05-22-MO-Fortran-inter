@@ -16,4 +16,24 @@ module object_type
     real :: q = -1.0         ! charge
   end type charged_sphere_t
 
+contains
+
+  subroutine object_info(p)
+
+    class(object_t), pointer, intent(in) :: p
+
+    select type (p)
+    type is (charged_sphere_t)
+       print *, "Charge = ", p%q
+    class is (sphere_t)
+       print *, "Radius = ", p%a
+    class is (object_t)
+       print *, "Density = ", p%rho
+       print *, "Position = ", p%x
+    class default
+       print *, "Unknown object type!"
+    end select
+
+  end subroutine object_info
+    
 end module object_type

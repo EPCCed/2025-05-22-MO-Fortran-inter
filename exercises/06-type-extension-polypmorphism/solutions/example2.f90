@@ -22,26 +22,19 @@ program example2
   print *, "object position ", p%x(:)
   !print *, "object radius   ", p%a
 
+  call object_info(p)
+
   p => s
 
   print *, "sphere density  ", p%rho
   print *, "sphere position ", p%x(:)
   !print *, "sphere radius   ", p%a
 
-  p => s
+  call object_info(p)
+
+  p => cs
   !print *, "sphere charge   ", p%q
 
-  print *, "Select type: "
-  select type (p)
-  class is (object_t)
-    print *, "density  ", p%rho
-    print *, "position ", p%x(:)
-  class is (sphere_t)
-    print *, "sphere radius   ", p%a
-  class is (charged_sphere_t)
-    print *, "sphere charge   ", p%q
-  class default
-    print *, "unknown"
-  end select
+  call object_info(p)
 
 end program example2

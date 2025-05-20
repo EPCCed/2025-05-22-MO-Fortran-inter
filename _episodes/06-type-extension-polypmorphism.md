@@ -247,7 +247,7 @@ of only of the declared type, but not of its descendents. So
 > > Error: 'q' at (1) is not a member of the 'object_t' structure gfortran exercise2.f90 object_type.f90
 > > ```
 > > 
-> > {: .solution}
+> {: .solution}
 > 
 > Comment out (don't remove for the time being) the erroneous statements
 > from the example so it will compile.
@@ -361,23 +361,23 @@ returns `.true.` if the dynamic types of both arguments are equal.
 > >
 > > A possible implementation might be of the form
 > > ```
-> > function generic_object(rho, x, a, q) result(obj)
-> >   real, intent(in) :: rho
-> >   integer, dimension(3), intent(in) :: x
-> >   real, intent(in), optional :: a
-> >   real, intent(in), optional :: q
-> >   class(object_t), allocatable :: obj
-> >   if (present(q)) then
-> >     obj = charged_sphere(sphere_t(rho=rho,x=x,a=a), q)
-> >   else if (present(a)) then
-> >     obj = sphere_t(object_t(rho, x), a)
-> >   else
-> >     obj = object_t(rho, x)
-> >   end if
-> > end function
+> > subroutine object_info(p)
+> >    class(object_t), pointer, intent(in) :: p
+> >    select type (p)
+> >   type is (charged_sphere_t)
+> >      print *, "Charge = ", p%q
+> >   class is (sphere_t)
+> >      print *, "Radius = ", p%a
+> >   class is (object_t)
+> >      print *, "Density = ", p%rho
+> >      print *, "Position = ", p%x
+> >   class default
+> >      print *, "Unknown object type!"
+> >   end select
+> > end subroutine object_info
 > > ```
-> >
-> {: .solution}
+> > >
+> > {: .solution}
 {: .challenge}
 
 {% include links.md %}
