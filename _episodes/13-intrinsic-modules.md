@@ -1,13 +1,15 @@
 ---
 title: "Intrinsic modules"
 teaching: 15
-exercises: 15
+exercises: 5
 questions:
-- ""
+- "What intrinsic modules does Fortran provide?"
+- "How can intrinsic modules aid writing portable code?"
 objectives:
-- ""
+- "Be aware of the intrinsic modules in Fortran and their uses"
 keypoints:
-- ""
+- "The `iso_fortran_env` intrinsic module provides constants and functions that enable code portability"
+- "The IEEE intrinsic modules allow programs to check the conformance with IEEE features"
 ---
 
 ## Intrisic and non-intrinsic modules
@@ -78,13 +80,16 @@ E.g.,
 
 ### Example (3 minutes)
 
-An example program is provided which prints out the values of the various
-symbols available from `iso_fortran_env`.
-```
-$ ftn print_iso_fortran_env.f90
-```
-To see the actual values in the kind arrays (`integer_kinds` and so on)
-some extra statements would be required.
+> ## `iso_fortran_env` values
+>
+> An example program is provided which prints out the values of the various
+> symbols available from `iso_fortran_env`.
+> ```
+> $ ftn print_iso_fortran_env.f90
+> ```
+> To see the actual values in the kind arrays (`integer_kinds` and so on)
+> some extra statements would be required.
+{: .challenge}
 
 
 ## IEEE arithmetic support
