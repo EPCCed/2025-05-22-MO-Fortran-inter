@@ -7,11 +7,11 @@ questions:
 - "How can we control access to components of data structures in Fortran?"
 - "How does assignment between derived types work?"
 objectives:
-- "Be able to declare your own data structures"
-- "Understand assignment operations in derived types and when shallow/deep copying occurs"
+- "Be able to declare your own data structures."
+- "Understand assignment operations in derived types and when shallow/deep copying occurs."
 keypoints:
 - "Derived types enable creating custom data structures in Fortran."
-- "Access to components of derived types can be controlled via the `private` attribute"
+- "Access to components of derived types can be controlled via the `private` attribute."
 ---
 
 Derived types provide the fundamental basis for data structures (cf. `struct` in
@@ -33,7 +33,7 @@ We recall that the general form of the declaration is:
 Components of types may be intrinsic, allocatable, pointer, or other derived
 types. The procedure part is used (optionally) to define so-called
 _type-bound procedures_. These are the equivalent of class methods in other
-languages (and will be covered in detail in later Sections). Scope of
+languages (and will be covered in detail in later episodes). Scope of
 components may be controlled via `public` or `private` statements.
 
 Encapsulation may be achieved by declaring a `public` type with `private`
@@ -71,8 +71,8 @@ application of `%` is relevant.
 
 ### Intrinsic assignments
 
-Intrinsic assignment is available for types, and just involves an
-intrinsic assignment of each component in turn. Schemetically:
+Intrinsic assignment is available for types, and involves an
+intrinsic assignment of each component in turn. Schematically:
 ```
   type (my_semi_opaque_t) :: a
   type (my_semi_opaque_t) :: b
@@ -113,10 +113,7 @@ place in the same way for that component.
 > >   
 > > end subroutine my_semi_opaque_print
 > > ```
-> >
-> > This code could be added to either the example program or the module, from a code organisation
-> > perspective the module probably makes the most sense.
-> > You should obtain the following output
+> > This code should be added to the module. You should obtain the following output:
 > > ```
 > > gfortran my_semi_opaque_type.f90 example1.f90 && ./a.out
 > >  a%idata=           2
@@ -162,7 +159,7 @@ is reached.
 > ## Derived types as procedure arguments
 >
 > Recall the behaviour of allocatable arrays as arguments to procedures. 
-> When the argument is `intent(out)` the array is deallocated, the same applies to allocatable
+> When the argument is `intent(out)` the array is deallocated on entry. The same applies to allocatable
 > components of derived types when a derived-type argument is `intent(out)`.
 >
 {: .callout}
@@ -255,7 +252,13 @@ If something other than intrinsic assignment for types is required, it is
 possible to overload the meaning of the assignment operation `=`.
 
 For example, if an assignment between two objects of `my_array_t` were
-required, one could write, as part of a module:
+required, one could add a new assignment interface in the module specification:
+```
+  interface assignment (=)
+    module procedure my_assignment
+  end interface assignment (=)
+```
+and then provide the following module subprogram:
 ```
   subroutine my_assignment(a, b)
 
@@ -266,10 +269,6 @@ required, one could write, as part of a module:
     a%values = b%values
 
   end subroutine my_assignment
-
-  interface assignment (=)
-    module procedure my_assignment
-  end interface assignment (=)
 ```
 This must be a subroutine with two arguments, the first with `intent(out)`
 (or `inout`) to represent the left-hand side of the assignment, and the
