@@ -376,8 +376,8 @@ returns `.true.` if the dynamic types of both arguments are equal.
 > >   end select
 > > end subroutine object_info
 > > ```
-> > >
-> > {: .solution}
+> >
+> {: .solution}
 {: .challenge}
 
 {% include links.md %}
