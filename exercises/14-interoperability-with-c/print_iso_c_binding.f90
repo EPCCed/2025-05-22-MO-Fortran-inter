@@ -9,7 +9,7 @@ program print_iso_c_binding
   print "('c_short               ', i8)", c_short
   print "('c_long                ', i8)", c_long
   print "('c_long_long           ', i8)", c_long_long
-  print "('c_sigmed_char         ', i8)", c_signed_char
+  print "('c_signed_char         ', i8)", c_signed_char
   print "('c_size_t              ', i8)", c_size_t
   print "('c_int8_t              ', i8)", c_int8_t
   print "('c_int32_t             ', i8)", c_int32_t
@@ -27,7 +27,7 @@ program print_iso_c_binding
 
   print "('c_float               ', i8)", c_float
   print "('c_double              ', i8)", c_double
-  print "('c_long_doublw         ', i8)", c_long_double
+  print "('c_long_double         ', i8)", c_long_double
 
   print "('c_float_complex       ', i8)", c_float_complex
   print "('c_double_complex      ', i8)", c_double_complex

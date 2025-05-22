@@ -23,7 +23,7 @@ However, as there is a subset of C which is also valid C++, one can
 also communicate with C++.)
 
 Facilities for ensuring that data objects and procedures are interoperable
-are provided by the inrinsic module `iso_c_binding`
+are provided by the intrinsic module `iso_c_binding`
 
 ### Numeric data types
 
@@ -178,7 +178,7 @@ copied in, whereon it may be changed, but not copied out again.
 > the `\0` terminating character).
 > 
 > The C function is supplied in the current directory; it needs to be
-> compiled (not linked) with the relevant C compiler, e.g.,
+> compiled (not linked) with the relevant C compiler, e.g. on ARCHER2,
 > ```
 > $ cc -c c_snprintf.c
 > ```
@@ -199,14 +199,48 @@ copied in, whereon it may be changed, but not copied out again.
 > 
 > > ## Solution
 > > 
-> > The returned string has a null character (total length = 6) whereas the number of characters written
-> > is 5.
+> > You will need to provide an interface like so:
+> > ```
+> >   interface
+> >     function f_snprintf_float(str, sz, cformat, x) &
+> >          bind(c, name = "c_snprintf_float")  result(nchar)
+> >       use iso_c_binding, only : c_int, c_char, c_size_t, c_float
+> >       character (kind = c_char, len = 1),        intent(out) :: str(*)
+> >       integer   (kind = c_size_t),        value, intent(in)  :: sz
+> >       character (kind = c_char, len = 1),        intent(in)  :: cformat(*)
+> >       real      (kind = c_float),         value, intent(in)  :: x
+> >       integer   (kind = c_int)                               :: nchar
+> >     end function f_snprintf_float
+> > 
+> >     function f_snprintf_double(str, sz, cformat, x) &
+> >          bind(c, name = "c_snprintf_double") result(nchar)
+> >       use iso_c_binding, only : c_int, c_char, c_size_t, c_double
+> >       character (kind = c_char, len = 1),        intent(out) :: str(*)
+> >       integer   (kind = c_size_t),        value, intent(in)  :: sz
+> >       character (kind = c_char, len = 1),        intent(in)  :: cformat(*)
+> >       real      (kind = c_double),        value, intent(in)  :: x
+> >       integer   (kind = c_int)                               :: nchar
+> >     end function f_snprintf_double
+> >   end interface
+> > ```
+> > {: .source}
+> > In order to make use of it, you should declare the variables that will be the
+> > actual arguments using the same interoperable types.
+> >
+> > According to the Fortran, the returned string has length of 6, whereas the string legnth
+> > reported by the returned value from `snprintf` is 5. The extra is the null character used
+> > by C to terminate strings.
+> >
+> > An example program called [f_snprintf.f90](../exercises/14-interoperability-with-c/solutions/f_snprintf.f90) is provided.
 > >
 > {: .solution}
 > 
 > If you were to implement interfaces for both the `c_snprintf_float()`
 > and `c_snprintf_double()` versions, you might wonder whether you could
-> overload the specific names with a generic name.
+> overload the specific names with a generic name. It seems like this should
+> be possible, but all attempts currently fail with the compiler unable to
+> resolve which specific interface it should use from the generic.
+>
 {: .challenge}
 
 ## Arrays
@@ -257,15 +291,40 @@ or `dimension(m,n)`, respectively.
 > The C function simply prints out the values of the elements.
 > 
 > Write a Fortran program that passes a small array of shape `(2,3)`
-> to C. Initialise the values consistent with Fortran array element
-> order (e.g., indicative of increasing address).
+> to the C function. Initialise the values consistent with Fortran array element
+> order (e.g., indicative of increasing address). Does what you see make sense?
+> > ## Solution
+> > 
+> > If you declare the array in Fortran as described and in your interface
+> > to the C function declare it as assumed size
+> > ```
+> > integer (kind = c_int), intent(in) :: idata(mlen, *)
+> > ```
+> > {: .source}
+> > then you should receive output like the following:
+> > ```
+> > Element [0][0]  0  1
+> > Element [0][1]  1  2
+> > Element [1][0]  2  3
+> > Element [1][1]  3  4
+> > Element [2][0]  4  5
+> > Element [2][1]  5  6
+> > ```
+> > {: .output}
+> > In C the array appears to be transposed. The loop moves through it
+> > in such a way that memory accesses are contiguous.
+> >
+> > Sample solution code is available in the `solutions` directory in
+> > [f_array.f90](../exercises/14-interoperability-with-c/solutions/f_array.f90).
+> {: .solution}
 {: .challenge}
 
 ### Pointers
 
-Derived types `c_ptr` and `c_funptr` are provided for interoperability
-with C pointer types. A number of functions are provided to manage the
-translation of Fortran entities to and from these new types.
+Derived types `c_ptr` and `c_funptr` are provided for interoperability with C
+pointer types. These shouldn't be assigned to directly, but instead a number of
+functions are provided to manage the translation of Fortran entities to and from
+these new types.
 
 - `c_loc(x)` returns the `c_ptr` type which C can use as the address of
 the argument. The argument can be a scalar, a contiguous array of
@@ -273,7 +332,7 @@ non-zero size (or allocated non-zero size), or an associated pointer.
 The argument must be of interoperable type. The argument must be a
 pointer or a data object with target attribute.
 
-- `c_funloc(p)` can return the address of an interoperable procedure.
+- `c_funloc(p)` can return the `c_funptr` address of an interoperable procedure.
 
 - `c_associated(c_ptr1 [, c_ptr2])` is an analogue of the `associated()`
 intrinsic which returns `.true.` if the first argument is not
@@ -291,11 +350,11 @@ return `.true.` if both arguments are the same.
 ### Derived types
 
 To be interoperable, a Fortran derived type must map to a plain C struct
-with interoperable compments. This means the Fortran type must have no
-type-bound procedures, cannot be extended, cannot have components that
-have either the allocatable or pointer attributes,
+with interoperable components. This means the Fortran type must have no
+type-bound procedures, cannot be extended, and cannot have components that
+have either the `allocatable` or `pointer` attributes,
 
-The type should be declared as bind(c), e.g.,
+The type should be declared as `bind(c)`, e.g.,
 ```
   type, bind(c), public :: my_type
     integer (c_int) :: icomponent
@@ -326,7 +385,7 @@ A corresponding subroutine in Fortran requires the definition of the
 interoperable structure, i.e.,
 ```
   type, bind(c) :: array_t
-    int (c_int)  :: nlen
+    integer (c_int)  :: nlen
     type (c_ptr) :: data
   end type array_t
 ```
@@ -343,13 +402,13 @@ An interoperable subroutine declared `bind(c)` might be
 
     ! ... perform operations with data(:) ...
 
-  end suroutine f_subroutine
+  end subroutine f_subroutine
 ```
 The information that the C data is of type `float` appears in the declaration
 of the Fortran pointer used to access the array. This must be initialised by
 a call to `c_f_pointer()` before it can be used.
 
-### Exerise (10 minutes)
+### Exercise (10 minutes)
 
 > ## Calling Fortran from C
 > 
@@ -358,6 +417,40 @@ a call to `c_f_pointer()` before it can be used.
 > the Fortran subroutine.
 > 
 > Try using either the C or the Fortran compiler to perform the link stage.
+>
+> > ## Solution
+> > 
+> > The Fortran type and subroutine can be placed in a module. Both need to be
+> > interoperable with C, meaning they should use `bind(c)`. In the C code
+> > provide the `struct`, the `extern void` declaration of the Fortran
+> > subroutine, then write a brief program to set some values in the `struct`'s
+> > array. In the Fortran subroutine, you can print the array (after retrieving
+> > a usable pointer to it via `c_f_pointer()`) and check it's correct.
+> >
+> > Example solutions are available in
+> > `exercises/14-interoperability-with-c/solutions` as
+> > [c_struct_to_fortran.c](../exercises/14-interoperability-with-c/solutions/c_struct_to_fortran.c)
+> > and
+> > [f_array_t.f90](../exercises/14-interoperability-with-c/solutions/f_array_t.f90).
+> >
+> > Using the GCC compilers, you should be able to compile the code as follows:
+> > ```
+> > ftn -c f_array_t.f90
+> > cc -c c_struct_to_fortran.c
+> > ftn f_array_t.o c_struct_to_fortran.o
+> > ```
+> > {: .output}
+> >
+> > You can also compile in two steps as long as you tell the C compiler that it
+> > will need to use `libgfortran.so` in order to link the symbols from
+> > `f_array_t.o`.
+> > ```
+> > ftn -c f_array_t.f90
+> > cc -lgfortran f_array_t.o c_struct_to_fortran.c
+> > ```
+> > {: .output}
+> > 
+> {: .solution}
 {: .challenge}
 
 {% include links.md %}
