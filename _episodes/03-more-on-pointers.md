@@ -59,7 +59,7 @@ do so.
 
 It is possible to specify the lower bound of a pointer array:
 ```
-  p(2:) = a(2:6)
+  p(2:) => a(2:6)
 ```
 in which case elements are indexed from the lower bound when using the
 pointer.
