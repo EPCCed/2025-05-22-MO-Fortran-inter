@@ -6,10 +6,11 @@ questions:
 - "How can we write Fortran programs that interact with C in a portable way?"
 - "How can we make use of Fortran procedures from C code?"
 objectives:
-- "Understand the use of the `iso_c_binding` intrinsic module"
-- "Write C/Fortran programs that call Fortran/C procedures using `iso_c_binding`"
+- "Understand the use of the `iso_c_binding` intrinsic module."
+- "Write C/Fortran programs that call Fortran/C procedures using `iso_c_binding`."
 keypoints:
-- ""
+- "The `iso_c_binding` module allows a programmer to write Fortran that is interoperable with C."
+- "Care must be taken with pointers and arrays, and with variables which are to be passed to C by value."
 ---
 
 Fortran 2003 introduced facilities to allow a Fortran program to interact
